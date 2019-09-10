@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>-->
+    <script src="libs/plotly.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="libs/bootstrap.min.js"></script>
+    <script src="libs/plotly.js"></script>
+    <link href="libs/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+     <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ["\\[","\\]"] ],
+          processEscapes: true
+        },
+        "HTML-CSS": { availableFonts: ["TeX"] }
+      });
+    </script>
+</head>
+<body>
+<main role="main">
+    <div class="container" style="width: 70%; align:center">
+        <h2 class="mt-5">Модели "хищник жертва"</h2>
+
+        <p>В данной интерактивной статье мы рассмотрим несколько математических моделей совместного существования двух биологических видов (популяций) типа “хищник — жертва” с возможностью просимулировать их развитие при различных начальных условия и параметрах.</p>
+
+        <h5>Моделью Лотки-Вольтерра</h5>
+        <p>Две популяции совместно обитают в изолированной среде. Среда стационарна и обеспечивает в неограниченном количестве всем необходимым для жизни один из видов, который будем называть жертвой. Другой вид, хищник, также находится в стационарных условиях, но питается лить особями первого вида. </p>
+
+
+        <div class="alert alert-primary" role="alert">
+            <i>Впервые модель была получена американским ученым А. Лоткой (1925), который использовал ее для описания динамики взаимодействующих биологических популяций. Чуть позже и независимо от Лотки аналогичные (и более сложные) модели были разработаны итальянским математиком В. Вольтерра (1926), глубокие исследования которого в области экологических проблем заложили фундамент математической теории биологических сообществ, или так называемой математической экологии. </i>
+        </div>
+
+        <p>Обозначим у — число хищников, x — число жертв. Со временем число жертв и хищников меняется, будем считать x и у непрерывными функциями времени t. Цель — построить модель, описывающую изменение состояния экосистемы. Рассмотрим скорость изменения численности жертв. Если хищников нет, то число жертв увеличивается в соответствии с законом Мальтуса — тем быстрее, чем больше жертв – экспоненциально:</p>
+
+        <script type="math/tex; mode=display">\dot{x} = ax</script>
+
+        <p>причем коэффициент а зависит только от условий жизни жертв, их естественной смертности и рождаемости. </p>
+
+        <p>Рост числа жертв в отсутствии хищников:</p>
+
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <div class="card text-center" id="card1">
+                    <div class="card-header text-muted">
+                        <div class="form-row">
+                            <div class="col-sm-2">
+                                <span>a: </span>
+                                <input type="number" class="form-control a" value=0.5>
+                            </div>
+                            <div class="col-sm-2">
+                                <span>x0: </span>
+                                <input type="number" class="form-control x0" value=0.2>
+                            </div>
+                            <div class="col-sm-6">
+                                <p></p>
+                                <input type="range" class="form-control-range t_slider" min="0" max="100" value="25">
+                                <b><span>t: </span><span class="t_value">0</span></b>
+                            </div>
+                            <div class="col-sm-2">
+                                <p></p>
+                                <a href="#" class="btn btn-primary simulate-button">Simulate!</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="plot" style="width: 100%; height: 300px; "></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <p>Скорость изменения числа хищников выражается производной dy. Если жертв нет, то число хищников уменьшается (у них нет пищи и они вымирают). </p>
+        <script type="math/tex; mode=display">\dot{y} = -by</script>
+        <p>Уменьшение числа хищников в отсутствии жертв:</p>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <div class="card text-center" id="card2">
+                    <div class="card-header text-muted">
+                        <div class="form-row">
+                            <div class="col-sm-2">
+                                <span>b: </span>
+                                <input type="number" class="form-control b" value=0.3>
+                            </div>
+                            <div class="col-sm-2">
+                                <span>y0: </span>
+                                <input type="number" class="form-control y0" value=0.3>
+                            </div>
+                            <div class="col-sm-6">
+                                <p></p>
+                                <input type="range" class="form-control-range t_slider" min="0" max="100" value="25">
+                                <b><span>t: </span><span class="t_value">0</span></b>
+                            </div>
+                            <div class="col-sm-2">
+                                <p></p>
+                                <a href="#" class="btn btn-primary simulate-button">Simulate!</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="plot" style="width: 100%; height: 300px; "></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <p>Взаимодействие двух этих видов моделируется так. Жертвы вымирают со скоростью, равной числу встреч хищников и жертв, которое в данной модели предполагается пропорциональным численности обеих популяций, т.е. равным с*х*у (с > 0). Поэтому </p>
+        <script type="math/tex; mode=display">\dot{x} = ax - cxy</script>
+        <p>Хищники же размножаются со скоростью, пропорциональной числу съеденных жертв d*x*y, где d > 0.</p>
+        <script type="math/tex; mode=display">\dot{y} = -by + dxy</script>
+        <p>В итоге получим систему уравнений, называемую моделью Лотки-Вольтерра:</p>
+        <script type="math/tex; mode=display">\dot{x} = ax - cxy</script>
+        <script type="math/tex; mode=display">\dot{y} = -by + dxy</script>
+        <p>Данная система имеет две стационарные точки:</p>
+        <script type="math/tex; mode=display">x=0, \ y = 0</script>
+        <script type="math/tex; mode=display">x=\cfrac b d, \ y = \cfrac a c</script>
+        <p>Ниже мы можем понаблюдать за моделью Лотки-Вольтерра с разными начальными условиями.</p>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <div class="card text-center" id="card3">
+                    <div class="card-header text-muted">
+                        <div class="form-row">
+                            <div class="col">
+                                <span>a: </span>
+                                <input type="number" class="form-control a" value=4>
+                            </div>
+                            <div class="col">
+                                <span>b: </span>
+                                <input type="number" class="form-control b" value=2.5>
+                            </div>
+                            <div class="col">
+                                <span>c: </span>
+                                <input type="number" class="form-control c" value=2>
+                            </div>
+                            <div class="col">
+                                <span>d: </span>
+                                <input type="number" class="form-control d" value=1>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <span>x0: </span>
+                                <input type="number" class="form-control x0" value=3>
+                            </div>
+                            <div class="col">
+                                <span>y0: </span>
+                                <input type="number" class="form-control y0" value=1>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-sm-9">
+                                <p></p>
+                                <input type="range" class="form-control-range t_slider" min="0" max="100" value="21">
+                                <b><span>t: </span><span class="t_value">0</span></b>
+                            </div>
+                            <div class="col-sm-3">
+                                <p></p>
+                                <a href="#" class="btn btn-primary simulate-button">Simulate!</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="plot" style="width: 100%; height: 300px; "></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <p>В то, что кривые действительно замкнутые, легко поверить посмотрев на графики x(t) и y(t). </p> 
+        <p>Видно, что процесс имеет колебательный характер. Например, при заданном начальном соотношении жертв к хищникам 3 : 1, обе популяции сначала растут. Когда число хищников достигает величины с, популяция жертв не успевает восстанавливаться и число жертв начинает убывать. Уменьшение количества пищи через некоторое время начинает сказываться на популяции хищников и когда число жертв достигает величины b/d (в этой точке y'=0), число хищников тоже начинает сокращаться вместе с сокращением числа жертв. Сокращение популяций происходит до тех пор, пока число хищников не достигнет величины a/c (в этой точке x'=0). С этого момента начинает расти популяция жертв, через некоторое время пищи становится достаточно, чтобы обеспечить прирост хищников, обе популяции растут, и... процесс повторяется снова и снова. </p>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <div class="card text-center" id="card4">
+                    <div class="card-header text-muted">
+                        <div class="form-row">
+                            <div class="col">
+                                <span>a: </span>
+                                <input type="number" class="form-control a" value=4>
+                            </div>
+                            <div class="col">
+                                <span>b: </span>
+                                <input type="number" class="form-control b" value=2.5>
+                            </div>
+                            <div class="col">
+                                <span>c: </span>
+                                <input type="number" class="form-control c" value=2>
+                            </div>
+                            <div class="col">
+                                <span>d: </span>
+                                <input type="number" class="form-control d" value=1>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <span>x0: </span>
+                                <input type="number" class="form-control x0" value=3>
+                            </div>
+                            <div class="col">
+                                <span>y0: </span>
+                                <input type="number" class="form-control y0" value=1>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-sm-9">
+                                <p></p>
+                                <input type="range" class="form-control-range t_slider" min="0" max="200" value="50">
+                                <b><span>t: </span><span class="t_value">0</span></b>
+                            </div>
+                            <div class="col-sm-3">
+                                <p></p>
+                                <a href="#" class="btn btn-primary simulate-button">Simulate!</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="plot" style="width: 100%; height: 300px; "></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <div class="alert alert-primary" role="alert">
+            <i>Данная модель достаточно универсальна. Она может описывать не только изменение популяций хищников и жертв, но и поведение конкурирующих фирм, рост народонаселения, численность воюющих армий, изменение экологической обстановки, развитие науки и пр.</i>
+        </div>
+        <h5>Модель Лотки-Вольтерра с логистической поправкой</h5>
+        <p>Колебания популяций хищников и жертв на самом деле наблюдаются не всегда. Нередко мы наблюдаем стабильное количество тех и других, хотя процесс съедения жертв хищниками идет постоянно. Такой случай требует введения логистической поправки, которая учитывается в несколько иной модели системы «хищник-жертва»</p>
+        <script type="math/tex; mode=display">\dot{x} = ax - cxy - \alpha x^2</script>
+        <script type="math/tex; mode=display">\dot{y} = -by + dxy - \alpha y^2</script>
+        <p>Дополнительный параметр alpha в этой модели позволяет управлять затуханием осцилляций (колебаний) модели.</p>
+        <p>В случае alpha > 0 фазовый портрет приобретает устойчивый фокус, а решения превращаются в затухающие колебания, при любом начальном условии состояние системы через некоторое время становится близким к стационарному и стремится к нему при t стремящемся к бесконенчости.</p>
+        <p>Однако при alpha < 0 стационарная точка наоборот становится неустойчивым фокусом и амплитуда колебаний численности видов растет. В этом случае как бы близко ни было начальное состояние к стационарному, с течением времени состояние системы будет сильно отличаться от стационарного (проверьте!)</p>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <div class="card text-center" id="card5">
+                    <div class="card-header text-muted">
+                        <div class="form-row">
+                            <div class="col">
+                                <span>a: </span>
+                                <input type="number" class="form-control a" value=4>
+                            </div>
+                            <div class="col">
+                                <span>b: </span>
+                                <input type="number" class="form-control b" value=2.5>
+                            </div>
+                            <div class="col">
+                                <span>c: </span>
+                                <input type="number" class="form-control c" value=2>
+                            </div>
+                            <div class="col">
+                                <span>d: </span>
+                                <input type="number" class="form-control d" value=1>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <span>alpha: </span>
+                                <input type="number" class="form-control alpha" value=0.1>
+                            </div>
+                            <div class="col">
+                                <span>x0: </span>
+                                <input type="number" class="form-control x0" value=3>
+                            </div>
+                            <div class="col">
+                                <span>y0: </span>
+                                <input type="number" class="form-control y0" value=1>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-sm-9">
+                                <p></p>
+                                <input type="range" class="form-control-range t_slider" min="0" max="100" value="80">
+                                <b><span>t: </span><span class="t_value">0</span></b>
+                            </div>
+                            <div class="col-sm-3">
+                                <p></p>
+                                <a href="#" class="btn btn-primary simulate-button">Simulate!</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="plot" style="width: 100%; height: 300px; "></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <div class="card text-center" id="card6">
+                    <div class="card-header text-muted">
+                        <div class="form-row">
+                            <div class="col">
+                                <span>a: </span>
+                                <input type="number" class="form-control a" value=4>
+                            </div>
+                            <div class="col">
+                                <span>b: </span>
+                                <input type="number" class="form-control b" value=2.5>
+                            </div>
+                            <div class="col">
+                                <span>c: </span>
+                                <input type="number" class="form-control c" value=2>
+                            </div>
+                            <div class="col">
+                                <span>d: </span>
+                                <input type="number" class="form-control d" value=1>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <span>alpha: </span>
+                                <input type="number" class="form-control alpha" value=0.1>
+                            </div>
+                            <div class="col">
+                                <span>x0: </span>
+                                <input type="number" class="form-control x0" value=3>
+                            </div>
+                            <div class="col">
+                                <span>y0: </span>
+                                <input type="number" class="form-control y0" value=1>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-sm-9">
+                                <p></p>
+                                <input type="range" class="form-control-range t_slider" min="0" max="200" value="80">
+                                <b><span>t: </span><span class="t_value">0</span></b>
+                            </div>
+                            <div class="col-sm-3">
+                                <p></p>
+                                <a href="#" class="btn btn-primary simulate-button">Simulate!</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="plot" style="width: 100%; height: 300px; "></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <p>Однако, система Лотки-Вольтерры обладает одним существенным недостатком: она неустойчива по отношению к малым возмущениям самой модели - траектории системы непрерывно зависят от параметров модели a, b, c, d и её центры легко разрушаются даже при самых малых изменениях правой части.</p>
+        <p>Поскольку в реальных популяциях присутствует много возмущающих факторов, не учтенных в модели Лотки — Вольтерры, эта модель вряд ли может претендовать на адекватное описание реальности. Этого недостатка лишена модель Холлинга-Тэннера, учитывающая большее число реальных факторов.</p>
+        <h5>Модель Холлинга-Тэннера</h5>
+        <p>Скорость изменения популяции жертв состоит из трех компонент:</p>
+        <ul>
+            <li>скорость размножения в отсутствии хищников по закону Мальтуса r*x</li>
+            <li>внутривидовая конкуренция, вызванная ограниченностью ресурсов экологической ниши -r*x^2/K</li>
+            <li>влияниe хищников в предположении, что хищник перестает убивать, когда насыщается -w*y*x/(D+x)</li>
+        </ul>
+        <p>Скорость роста популяции хищников строится так же, как в модели Вольтерра—Лотка, в предположении, что жертвы встречаются редко. Если для поддержания жизни одного хищника нужно J жертв, то популяция из x жертв сможет обеспечить пищей x/J хищников. Модель роста популяции хищников, в которой их число не может превысить эту критическую величину (y < x/J), имеет вид</p>
+        <script type="math/tex; mode=display">\dot{y} = y(s - \frac {sJ}{x} y)</script>
+        <p>Таким образом, имеем модель Холлинга—Тэннера:</p>
+        <script type="math/tex; mode=display">\dot{x} = rx - \frac {rx^2}{K} - wy\frac{x}{D+x}</script>
+        <script type="math/tex; mode=display">\dot{y} = sy - s\frac {Jy}{x} y</script>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <div class="card text-center" id="card7">
+                    <div class="card-header text-muted">
+                        <div class="form-row">
+                            <div class="col">
+                                <span>r: </span>
+                                <input type="number" class="form-control r" value=1>
+                            </div>
+                            <div class="col">
+                                <span>w: </span>
+                                <input type="number" class="form-control w" value=1.5>
+                            </div>
+                            <div class="col">
+                                <span>s: </span>
+                                <input type="number" class="form-control s" value=0.25>
+                            </div>
+                            <div class="col">
+                                <span>K: </span>
+                                <input type="number" class="form-control K" value=7>
+                            </div>
+                            <div class="col">
+                                <span>D: </span>
+                                <input type="number" class="form-control D" value=1>
+                            </div>
+                            <div class="col">
+                                <span>J: </span>
+                                <input type="number" class="form-control J" value=0.5>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <span>x0: </span>
+                                <input type="number" class="form-control x0" value=3>
+                            </div>
+                            <div class="col">
+                                <span>y0: </span>
+                                <input type="number" class="form-control y0" value=1>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-sm-9">
+                                <p></p>
+                                <input type="range" class="form-control-range t_slider" min="0" max="200" value="120">
+                                <b><span>t: </span><span class="t_value">0</span></b>
+                            </div>
+                            <div class="col-sm-3">
+                                <p></p>
+                                <a href="#" class="btn btn-primary simulate-button">Simulate!</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="plot" style="width: 100%; height: 300px; "></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <div class="card text-center" id="card8">
+                    <div class="card-header text-muted">
+                        <div class="form-row">
+                            <div class="col">
+                                <span>r: </span>
+                                <input type="number" class="form-control r" value=1>
+                            </div>
+                            <div class="col">
+                                <span>w: </span>
+                                <input type="number" class="form-control w" value=1.5>
+                            </div>
+                            <div class="col">
+                                <span>s: </span>
+                                <input type="number" class="form-control s" value=0.25>
+                            </div>
+                            <div class="col">
+                                <span>K: </span>
+                                <input type="number" class="form-control K" value=7>
+                            </div>
+                            <div class="col">
+                                <span>D: </span>
+                                <input type="number" class="form-control D" value=1>
+                            </div>
+                            <div class="col">
+                                <span>J: </span>
+                                <input type="number" class="form-control J" value=0.5>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <span>x0: </span>
+                                <input type="number" class="form-control x0" value=3>
+                            </div>
+                            <div class="col">
+                                <span>y0: </span>
+                                <input type="number" class="form-control y0" value=1>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-sm-9">
+                                <p></p>
+                                <input type="range" class="form-control-range t_slider" min="0" max="200" value="120">
+                                <b><span>t: </span><span class="t_value">0</span></b>
+                            </div>
+                            <div class="col-sm-3">
+                                <p></p>
+                                <a href="#" class="btn btn-primary simulate-button">Simulate!</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="plot" style="width: 100%; height: 300px; "></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <p>Главное свойство этой модели заключается в том, что в конечном счете колебания задаются предельным циклом фазового портрета, который может быть устойчивым. Он и определяет амплитуду колебаний, которые устанавливаются в стационарном режиме работы системы. При этом колебания могут как затухать во времени (пример чего и приведен), так и возрастать, приближаясь при этом к стационарным колебаниям.</p>
+        <p>При </p>
+        <script type="math/tex; mode=display">s < \frac r K \cdot \frac {K - D - 2} {1 + D}</script>
+        <p>на фазовом портрете будет устойчивый предельный цикл.</p>
+        <p></p>
+        <h6>Источники</h6>
+        <div style="color: dimgrey">
+        <p>Ахмеров Р.Р., Садовский Б.Н. Очерки по ОДУ</p>
+        <p>Д.И. Трубецков Феномен математической модели Лотки-Вольтерра и сходных с ней</p>
+        <p>В. П. Дьяконов, И. В. Абраменкова, А. А. Пеньков Новые информационные технологии Часть 3. Основы математики и математическое моделирование Учебное пособие</p>
+        <p>А. Ю. Коврижных, О. О. Коврижных, Дифференциальные и разностные уравнения</p></div>
+    </div>
+</main>
+
+<!--<span>t: </span><span id="t_value">0</span>-->
+<!--<input id="t_slider" type="range" min="0" max="100" value="25">-->
+<script>
+</script>
+
+<!--<input value="Simulate!" id="simulate_button" type="button">-->
+<!--<div id="tester" style="width:600px;height:250px;"></div>-->
+
+<script src="plotting_utils.js"></script>
+<script src="setup.js"></script>
+
+</body>
+</html>
